@@ -11,6 +11,10 @@ fn main() {
     let nx = 200;
     let ny = 100;
 
+    // consider:
+    // let buffer: &[u8] = ...;
+    // image::save_buffer(&Path::new("image.png"), buffer, 800, 600, image::RGB(8))
+
     let mut img = ImageBuffer::new(nx, ny);
 
     for j in (0..ny).rev() {
