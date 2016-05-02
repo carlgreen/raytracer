@@ -1,84 +1,19 @@
 extern crate image;
 
+mod color;
+mod ray;
+mod vector;
+
 use std::fs::File;
-use std::ops::Add;
-use std::ops::Div;
-use std::ops::Mul;
-use std::ops::Sub;
 use std::path::Path;
 use image::{
     GenericImage,
     ImageBuffer
 };
 
-struct Color {
-    r: f64,
-    g: f64,
-    b: f64,
-}
-
-struct Vector {
-    x: f64,
-    y: f64,
-    z: f64,
-}
-
-impl Vector {
-    fn length(&self) -> f64 {
-        (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
-    }
-}
-
-impl<'a> Add<&'a Vector> for &'a Vector {
-    type Output = Vector;
-
-    fn add(self, other: &Vector) -> Vector {
-        Vector { x: self.x + other.x, y: self.y + other.y, z: self.z + other.z }
-    }
-}
-
-impl<'a> Div<f64> for &'a Vector {
-    type Output = Vector;
-
-    fn div(self, div: f64) -> Vector {
-        Vector { x: self.x / div, y: self.y / div, z: self.z / div }
-    }
-}
-
-impl<'a> Mul<&'a Vector> for f64 {
-    type Output = Vector;
-
-    fn mul(self, vector: &Vector) -> Vector {
-        Vector { x: self * vector.x, y: self * vector.y, z: self * vector.z }
-    }
-}
-
-impl<'a> Sub<&'a Vector> for &'a Vector {
-    type Output = Vector;
-
-    fn sub(self, other: &Vector) -> Vector {
-        Vector { x: self.x - other.x, y: self.y - other.y, z: self.z - other.z }
-    }
-}
-
-struct Ray<'a> {
-    a: &'a Vector,
-    b: &'a Vector,
-}
-
-impl<'a> Ray<'a> {
-    fn origin(&self) -> Vector {
-        Vector{x: self.a.x, y: self.a.y, z: self.a.z}
-    }
-
-    fn direction(&self) -> Vector {
-        Vector{x: self.b.x, y: self.b.y, z: self.b.z}
-    }
-
-    fn point_at_parameter(&self, t: f64) -> Vector {
-        Vector { x: self.a.x + t * self.b.x, y: self.a.y + t * self.b.y, z: self.a.z + t * self.b.z }
-    }
-}
+use color::Color;
+use ray::Ray;
+use vector::Vector;
 
 fn unit_vector(vector: &Vector) -> Vector {
     return vector / vector.length();
