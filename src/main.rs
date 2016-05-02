@@ -1,9 +1,12 @@
 extern crate image;
 
 mod color;
+mod hitable;
 mod ray;
+mod sphere;
 mod vector;
 
+use std::f64;
 use std::fs::File;
 use std::path::Path;
 use image::{
@@ -12,33 +15,18 @@ use image::{
 };
 
 use color::Color;
+use hitable::Hitable;
 use ray::Ray;
+use sphere::Sphere;
 use vector::Vector;
 
 fn unit_vector(vector: &Vector) -> Vector {
     return vector / vector.length();
 }
 
-fn dot(v1: &Vector, v2: &Vector) -> f64 {
-    v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
-}
-
-fn hit_sphere(center: &Vector, radius: f64, ray: &Ray) -> f64 {
-    let oc = &ray.origin() - center;
-    let a = dot(&ray.direction(), &ray.direction());
-    let b = 2.0 * dot(&oc, &ray.direction());
-    let c = dot(&oc, &oc) - radius * radius;
-    let discriminant = b * b - 4.0 * a * c;
-    if discriminant < 0.0 {
-        return -1.0;
-    }
-    (-b - discriminant.sqrt()) / (2.0 * a)
-}
-
-fn color(ray: Ray) -> Color {
-    let t = hit_sphere(&Vector{x: 0.0, y: 0.0, z: -1.0}, 0.5, &ray);
-    if t > 0.0 {
-        let n = unit_vector(&(&ray.point_at_parameter(t) - &Vector{x: 0.0, y: 0.0, z: -1.0}));
+fn color(ray: Ray, hitable: &Hitable) -> Color {
+    let (hit, n) = hitable.hit(&ray, 0.0, f64::MAX);
+    if hit {
         let c = 0.5 * &Vector{x: n.x + 1.0, y: n.y + 1.0, z: n.z + 1.0};
         return Color{r: c.x, g: c.y, b: c.z};
     }
@@ -64,12 +52,14 @@ fn main() {
     let vertical = Vector {x: 0.0, y: 2.0, z: 0.0};
     let origin = Vector {x: 0.0, y: 0.0, z: 0.0};
 
+    let sphere1 = Sphere{center: &Vector{x: 0.0, y: 0.0, z: -1.0}, radius: 0.5};
+
     for j in (0..ny).rev() {
         for i in 0..nx {
             let u = i as f64 / nx as f64;
             let v = j as f64 / ny as f64;
             let r = Ray{a: &origin, b: &(&(&lower_left_corner + &(u * &horizontal)) + &(v * &vertical))};
-            let col = color(r);
+            let col = color(r, &sphere1);
 
             let ir = (255.99 * col.r) as u8;
             let ig = (255.99 * col.g) as u8;
