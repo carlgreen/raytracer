@@ -74,6 +74,10 @@ impl<'a> Ray<'a> {
     fn direction(&self) -> Vector {
         Vector{x: self.b.x, y: self.b.y, z: self.b.z}
     }
+
+    fn point_at_parameter(&self, t: f64) -> Vector {
+        Vector { x: self.a.x + t * self.b.x, y: self.a.y + t * self.b.y, z: self.a.z + t * self.b.z }
+    }
 }
 
 fn unit_vector(vector: &Vector) -> Vector {
@@ -84,18 +88,24 @@ fn dot(v1: &Vector, v2: &Vector) -> f64 {
     v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 }
 
-fn hit_sphere(center: &Vector, radius: f64, ray: &Ray) -> bool {
+fn hit_sphere(center: &Vector, radius: f64, ray: &Ray) -> f64 {
     let oc = &ray.origin() - center;
     let a = dot(&ray.direction(), &ray.direction());
     let b = 2.0 * dot(&oc, &ray.direction());
     let c = dot(&oc, &oc) - radius * radius;
     let discriminant = b * b - 4.0 * a * c;
-    discriminant > 0.0
+    if discriminant < 0.0 {
+        return -1.0;
+    }
+    (-b - discriminant.sqrt()) / (2.0 * a)
 }
 
 fn color(ray: Ray) -> Color {
-    if hit_sphere(&Vector{x: 0.0, y: 0.0, z: -1.0}, 0.5, &ray) {
-        return Color{r: 1.0, g: 0.0, b: 0.0};
+    let t = hit_sphere(&Vector{x: 0.0, y: 0.0, z: -1.0}, 0.5, &ray);
+    if t > 0.0 {
+        let n = unit_vector(&(&ray.point_at_parameter(t) - &Vector{x: 0.0, y: 0.0, z: -1.0}));
+        let c = 0.5 * &Vector{x: n.x + 1.0, y: n.y + 1.0, z: n.z + 1.0};
+        return Color{r: c.x, g: c.y, b: c.z};
     }
     let unit_direction = unit_vector(&ray.direction());
     let t = 0.5 * (unit_direction.y + 1.0);
