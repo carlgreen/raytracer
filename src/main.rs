@@ -4,6 +4,7 @@ use std::fs::File;
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
+use std::ops::Sub;
 use std::path::Path;
 use image::{
     GenericImage,
@@ -52,12 +53,24 @@ impl<'a> Mul<&'a Vector> for f64 {
     }
 }
 
+impl<'a> Sub<&'a Vector> for &'a Vector {
+    type Output = Vector;
+
+    fn sub(self, other: &Vector) -> Vector {
+        Vector { x: self.x - other.x, y: self.y - other.y, z: self.z - other.z }
+    }
+}
+
 struct Ray<'a> {
     a: &'a Vector,
     b: &'a Vector,
 }
 
 impl<'a> Ray<'a> {
+    fn origin(&self) -> Vector {
+        Vector{x: self.a.x, y: self.a.y, z: self.a.z}
+    }
+
     fn direction(&self) -> Vector {
         Vector{x: self.b.x, y: self.b.y, z: self.b.z}
     }
@@ -67,7 +80,23 @@ fn unit_vector(vector: &Vector) -> Vector {
     return vector / vector.length();
 }
 
+fn dot(v1: &Vector, v2: &Vector) -> f64 {
+    v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+}
+
+fn hit_sphere(center: &Vector, radius: f64, ray: &Ray) -> bool {
+    let oc = &ray.origin() - center;
+    let a = dot(&ray.direction(), &ray.direction());
+    let b = 2.0 * dot(&oc, &ray.direction());
+    let c = dot(&oc, &oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
+    discriminant > 0.0
+}
+
 fn color(ray: Ray) -> Color {
+    if hit_sphere(&Vector{x: 0.0, y: 0.0, z: -1.0}, 0.5, &ray) {
+        return Color{r: 1.0, g: 0.0, b: 0.0};
+    }
     let unit_direction = unit_vector(&ray.direction());
     let t = 0.5 * (unit_direction.y + 1.0);
     let v = &((1.0 - t) * &Vector{x: 1.0, y: 1.0, z: 1.0})
