@@ -48,9 +48,9 @@ fn main() {
 
     let mut img = ImageBuffer::new(nx, ny);
 
-    let lower_left_corner = Vector {x: -2.0, y: -1.0, z: -1.0};
+    let lower_left_corner = Vector {x: -2.0, y: 1.0, z: -1.0};
     let horizontal = Vector {x: 4.0, y: 0.0, z: 0.0};
-    let vertical = Vector {x: 0.0, y: 2.0, z: 0.0};
+    let vertical = Vector {x: 0.0, y: -2.0, z: 0.0};
     let origin = Vector {x: 0.0, y: 0.0, z: 0.0};
 
     let sphere1 = Sphere{center: &Vector{x: 0.0, y: 0.0, z: -1.0}, radius: 0.5};
