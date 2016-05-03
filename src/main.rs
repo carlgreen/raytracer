@@ -79,7 +79,7 @@ fn main() {
         for i in 0..nx {
             let u = i as f64 / nx as f64;
             let v = j as f64 / ny as f64;
-            let r = Ray{a: &origin, b: &(&(&lower_left_corner + &(u * &horizontal)) + &(v * &vertical))};
+            let r = Ray::new(&origin, &(&(&lower_left_corner + &(u * &horizontal)) + &(v * &vertical)));
             let col = color(r, &world);
 
             let ir = (255.99 * col.r) as u8;

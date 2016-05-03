@@ -1,11 +1,18 @@
 use vector::Vector;
 
-pub struct Ray<'a> {
-    pub a: &'a Vector,
-    pub b: &'a Vector,
+pub struct Ray {
+    a: Vector,
+    b: Vector,
 }
 
-impl<'a> Ray<'a> {
+impl Ray {
+    pub fn new(a: &Vector, b: &Vector) -> Ray {
+        Ray{
+            a: Vector{x: a.x, y: a.y, z: a.z},
+            b: Vector{x: b.x, y: b.y, z: b.z},
+        }
+    }
+
     pub fn origin(&self) -> Vector {
         Vector{x: self.a.x, y: self.a.y, z: self.a.z}
     }
