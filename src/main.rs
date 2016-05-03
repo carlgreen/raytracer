@@ -57,7 +57,7 @@ fn main() {
     let sphere2 = Sphere{center: &Vector{x: 0.0, y: -100.5, z: -1.0}, radius: 100.0};
     let world = Hitables{objects: &[&sphere1, &sphere2]};
 
-    for j in (0..ny).rev() {
+    for j in 0..ny {
         for i in 0..nx {
             let u = i as f64 / nx as f64;
             let v = j as f64 / ny as f64;
