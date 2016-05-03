@@ -8,17 +8,17 @@ pub struct Ray {
 impl Ray {
     pub fn new(a: &Vector, b: &Vector) -> Ray {
         Ray{
-            a: Vector{x: a.x, y: a.y, z: a.z},
-            b: Vector{x: b.x, y: b.y, z: b.z},
+            a: a.clone(),
+            b: b.clone(),
         }
     }
 
     pub fn origin(&self) -> Vector {
-        Vector{x: self.a.x, y: self.a.y, z: self.a.z}
+        self.a.clone()
     }
 
     pub fn direction(&self) -> Vector {
-        Vector{x: self.b.x, y: self.b.y, z: self.b.z}
+        self.b.clone()
     }
 
     pub fn point_at_parameter(&self, t: f64) -> Vector {

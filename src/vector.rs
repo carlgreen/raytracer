@@ -3,7 +3,7 @@ use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Vector {
     pub x: f64,
     pub y: f64,
