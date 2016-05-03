@@ -3,6 +3,7 @@ use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
 
+#[derive(Debug, PartialEq)]
 pub struct Vector {
     pub x: f64,
     pub y: f64,

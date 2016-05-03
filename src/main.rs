@@ -25,6 +25,24 @@ fn unit_vector(vector: &Vector) -> Vector {
     return vector / vector.length();
 }
 
+#[cfg(test)]
+mod tests {
+    use vector::Vector;
+    use super::unit_vector;
+
+    #[test]
+    fn test_already_unit_vector() {
+        assert_eq!(Vector{x: 1.0, y: 0.0, z: 0.0}, unit_vector(&Vector{x: 1.0, y: 0.0, z: 0.0}));
+    }
+
+    #[test]
+    fn test_non_unit_vector() {
+        let got = unit_vector(&Vector{x: 0.0, y: 1.0, z: 1.0});
+        assert!(got.y > 0.707 && got.y < 0.708);
+        assert!(got.z > 0.707 && got.z < 0.708);
+    }
+}
+
 fn color(ray: Ray, hitable: &Hitable) -> Color {
     let (hit, _, n) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
