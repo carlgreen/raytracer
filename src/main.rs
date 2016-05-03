@@ -16,6 +16,7 @@ use image::{
 
 use color::Color;
 use hitable::Hitable;
+use hitable::Hitables;
 use ray::Ray;
 use sphere::Sphere;
 use vector::Vector;
@@ -25,7 +26,7 @@ fn unit_vector(vector: &Vector) -> Vector {
 }
 
 fn color(ray: Ray, hitable: &Hitable) -> Color {
-    let (hit, n) = hitable.hit(&ray, 0.0, f64::MAX);
+    let (hit, _, n) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
         let c = 0.5 * &Vector{x: n.x + 1.0, y: n.y + 1.0, z: n.z + 1.0};
         return Color{r: c.x, g: c.y, b: c.z};
@@ -53,13 +54,15 @@ fn main() {
     let origin = Vector {x: 0.0, y: 0.0, z: 0.0};
 
     let sphere1 = Sphere{center: &Vector{x: 0.0, y: 0.0, z: -1.0}, radius: 0.5};
+    let sphere2 = Sphere{center: &Vector{x: 0.0, y: -100.5, z: -1.0}, radius: 100.0};
+    let world = Hitables{objects: &[&sphere1, &sphere2]};
 
     for j in (0..ny).rev() {
         for i in 0..nx {
             let u = i as f64 / nx as f64;
             let v = j as f64 / ny as f64;
             let r = Ray{a: &origin, b: &(&(&lower_left_corner + &(u * &horizontal)) + &(v * &vertical))};
-            let col = color(r, &sphere1);
+            let col = color(r, &world);
 
             let ir = (255.99 * col.r) as u8;
             let ig = (255.99 * col.g) as u8;
