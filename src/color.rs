@@ -1,10 +1,23 @@
 use std::ops::Add;
 use std::ops::Div;
 
+#[derive(Debug)]
 pub struct Color {
     pub r: f64,
     pub g: f64,
     pub b: f64,
+}
+
+fn near(a: f64, b: f64) -> bool {
+    let delta = 0.000001;
+    (a - b).abs() < delta
+}
+
+/// close enough
+impl PartialEq for Color {
+    fn eq(&self, other: &Color) -> bool {
+        near(self.r, other.r) && near(self.g, other.g) && near(self.b, other.b)
+    }
 }
 
 impl Add<Color> for Color {
@@ -31,19 +44,12 @@ mod tests {
     fn test_add_color() {
         let col1 = Color {r: 0.1, g: 0.2, b: 0.3};
         let col2 = Color {r: 0.4, g: 0.5, b: 0.6};
-        // assert_eq!(Color {r: 0.5, g: 0.7, b: 0.9}, col1 + col2);
-        let got = col1 + col2;
-        assert!(got.r > 0.499 && got.r < 0.501);
-        assert!(got.g > 0.699 && got.g < 0.701);
-        assert!(got.b > 0.899 && got.b < 0.901);
+        assert_eq!(Color {r: 0.5, g: 0.7, b: 0.9}, col1 + col2);
     }
 
     #[test]
     fn test_div_color() {
         let col1 = Color {r: 0.1, g: 0.2, b: 0.3};
-        let got = col1 / 3.0;
-        assert!(got.r > 0.032 && got.r < 0.034);
-        assert!(got.g > 0.065 && got.g < 0.067);
-        assert!(got.b > 0.099 && got.b < 0.101);
+        assert_eq!(Color {r: 0.033333, g: 0.066666, b: 0.1}, col1 / 3.0);
     }
 }
