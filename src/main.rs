@@ -1,4 +1,5 @@
 extern crate image;
+extern crate rand;
 
 mod camera;
 mod color;
@@ -61,6 +62,7 @@ fn color(ray: Ray, hitable: &Hitable) -> Color {
 fn main() {
     let nx = 200;
     let ny = 100;
+    let ns = 100;
 
     // consider:
     // let buffer: &[u8] = ...;
@@ -85,10 +87,14 @@ fn main() {
 
     for j in 0..ny {
         for i in 0..nx {
-            let u = i as f64 / nx as f64;
-            let v = j as f64 / ny as f64;
-            let r = cam.get_ray(u, v);
-            let col = color(r, &world);
+            let mut col = Color{r: 0.0, g: 0.0, b: 0.0};
+            for _ in 0..ns {
+                let u = (i as f64 + rand::random::<f64>()) / nx as f64;
+                let v = (j as f64 + rand::random::<f64>()) / ny as f64;
+                let r = cam.get_ray(u, v);
+                col = col + color(r, &world);
+            }
+            col = col / ns as f64;
 
             let ir = (255.99 * col.r) as u8;
             let ig = (255.99 * col.g) as u8;
