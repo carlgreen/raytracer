@@ -1,5 +1,6 @@
 extern crate image;
 
+mod camera;
 mod color;
 mod hitable;
 mod ray;
@@ -14,6 +15,7 @@ use image::{
     ImageBuffer
 };
 
+use camera::Camera;
 use color::Color;
 use hitable::Hitable;
 use hitable::Hitables;
@@ -74,12 +76,18 @@ fn main() {
     let sphere1 = Sphere{center: &Vector{x: 0.0, y: 0.0, z: -1.0}, radius: 0.5};
     let sphere2 = Sphere{center: &Vector{x: 0.0, y: -100.5, z: -1.0}, radius: 100.0};
     let world = Hitables{objects: &[&sphere1, &sphere2]};
+    let cam = Camera {
+      lower_left_corner: lower_left_corner,
+      horizontal: horizontal,
+      vertical: vertical,
+      origin: origin,
+    };
 
     for j in 0..ny {
         for i in 0..nx {
             let u = i as f64 / nx as f64;
             let v = j as f64 / ny as f64;
-            let r = Ray::new(&origin, &(&(&lower_left_corner + &(u * &horizontal)) + &(v * &vertical)));
+            let r = cam.get_ray(u, v);
             let col = color(r, &world);
 
             let ir = (255.99 * col.r) as u8;
