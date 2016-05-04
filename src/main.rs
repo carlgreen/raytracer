@@ -47,7 +47,7 @@ mod tests {
 }
 
 fn color(ray: Ray, hitable: &Hitable) -> Color {
-    let (hit, _, n) = hitable.hit(&ray, 0.0, f64::MAX);
+    let (hit, _, _, n) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
         let c = 0.5 * &Vector{x: n.x + 1.0, y: n.y + 1.0, z: n.z + 1.0};
         return Color{r: c.x, g: c.y, b: c.z};
