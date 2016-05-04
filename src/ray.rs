@@ -7,7 +7,7 @@ pub struct Ray {
 
 impl Ray {
     pub fn new(a: &Vector, b: &Vector) -> Ray {
-        Ray{
+        Ray {
             a: a.clone(),
             b: b.clone(),
         }
@@ -22,6 +22,10 @@ impl Ray {
     }
 
     pub fn point_at_parameter(&self, t: f64) -> Vector {
-        Vector { x: self.a.x + t * self.b.x, y: self.a.y + t * self.b.y, z: self.a.z + t * self.b.z }
+        Vector {
+            x: self.a.x + t * self.b.x,
+            y: self.a.y + t * self.b.y,
+            z: self.a.z + t * self.b.z,
+        }
     }
 }

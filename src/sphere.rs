@@ -20,7 +20,7 @@ impl<'a> Hitable for Sphere<'a> {
         let c = dot(&oc, &oc) - self.radius * self.radius;
         let discriminant = b * b - a * c;
         if discriminant > 0.0 {
-            let temp = (-b - discriminant.sqrt()) / a   ;
+            let temp = (-b - discriminant.sqrt()) / a;
             if temp < t_max && temp > t_min {
                 let p = ray.point_at_parameter(temp);
                 let normal = &(&p - self.center) / self.radius;
@@ -33,7 +33,18 @@ impl<'a> Hitable for Sphere<'a> {
                 return (true, temp, p, normal);
             }
         }
-        return (false, 0.0, Vector{x: 0.0, y: 0.0, z: 0.0}, Vector{x: 0.0, y: 0.0, z: 0.0});
+        return (false,
+                0.0,
+                Vector {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+                Vector {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        });
 
     }
 }
