@@ -1,5 +1,6 @@
 use std::ops::Add;
 use std::ops::Div;
+use std::ops::Mul;
 
 #[derive(Debug)]
 pub struct Color {
@@ -36,6 +37,14 @@ impl Div<f64> for Color {
     }
 }
 
+impl Mul<Color> for f64 {
+    type Output = Color;
+
+    fn mul(self, color: Color) -> Color {
+        Color { r: self * color.r, g: self * color.g, b: self * color.b }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Color;
@@ -51,5 +60,11 @@ mod tests {
     fn test_div_color() {
         let col1 = Color {r: 0.1, g: 0.2, b: 0.3};
         assert_eq!(Color {r: 0.033333, g: 0.066666, b: 0.1}, col1 / 3.0);
+    }
+
+    #[test]
+    fn test_mul_color() {
+        let col1 = Color {r: 0.1, g: 0.2, b: 0.3};
+        assert_eq!(Color {r: 0.2, g: 0.4, b: 0.6}, 2.0 * col1);
     }
 }
