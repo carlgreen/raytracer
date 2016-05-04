@@ -45,6 +45,12 @@ impl Mul<Color> for f64 {
     }
 }
 
+impl Color {
+    pub fn gamma_correct(&self) -> Color {
+        Color { r: self.r.sqrt(), g: self.g.sqrt(), b: self.b.sqrt() }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Color;

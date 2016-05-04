@@ -110,6 +110,8 @@ fn main() {
             }
             col = col / ns as f64;
 
+            col = col.gamma_correct();
+
             let ir = (255.99 * col.r) as u8;
             let ig = (255.99 * col.g) as u8;
             let ib = (255.99 * col.b) as u8;
