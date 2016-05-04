@@ -46,11 +46,25 @@ mod tests {
     }
 }
 
+// TODO dedupe
+fn dot(v1: &Vector, v2: &Vector) -> f64 {
+    v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+}
+
+fn random_in_unit_sphere() -> Vector {
+    loop {
+        let p = &(2.0 * &Vector{x: rand::random::<f64>(), y: rand::random::<f64>(), z: rand::random::<f64>()}) - &Vector{x: 1.0, y: 1.0, z: 1.0};
+        if dot(&p, &p) < 1.0 {
+            return p
+        }
+    }
+}
+
 fn color(ray: Ray, hitable: &Hitable) -> Color {
-    let (hit, _, _, n) = hitable.hit(&ray, 0.0, f64::MAX);
+    let (hit, _, p, n) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
-        let c = 0.5 * &Vector{x: n.x + 1.0, y: n.y + 1.0, z: n.z + 1.0};
-        return Color{r: c.x, g: c.y, b: c.z};
+        let target = &(&p + &n) + &random_in_unit_sphere();
+        return 0.5 * color(Ray::new(&p, &(&target - &p)), hitable);
     }
     let unit_direction = unit_vector(&ray.direction());
     let t = 0.5 * (unit_direction.y + 1.0);
