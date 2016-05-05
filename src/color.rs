@@ -2,6 +2,8 @@ use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
 
+use vector::Vector;
+
 #[derive(Debug)]
 pub struct Color {
     pub r: f64,
@@ -57,6 +59,18 @@ impl Mul<Color> for f64 {
     }
 }
 
+impl<'a> Mul<&'a Color> for &'a Vector {
+    type Output = Color;
+
+    fn mul(self, color: &Color) -> Color {
+        Color {
+            r: self.x * color.r,
+            g: self.y * color.g,
+            b: self.z * color.b,
+        }
+    }
+}
+
 impl Color {
     pub fn gamma_correct(&self) -> Color {
         Color {
@@ -70,6 +84,7 @@ impl Color {
 #[cfg(test)]
 mod tests {
     use super::Color;
+    use vector::Vector;
 
     #[test]
     fn test_add_color() {
@@ -119,5 +134,25 @@ mod tests {
                        b: 0.6,
                    },
                    2.0 * col1);
+    }
+
+    #[test]
+    fn test_mul_color_by_vector() {
+        let vec1 = Vector {
+            x: 0.4,
+            y: 0.3,
+            z: 0.2,
+        };
+        let col1 = Color {
+            r: 0.1,
+            g: 0.2,
+            b: 0.3,
+        };
+        assert_eq!(Color {
+                       r: 0.04,
+                       g: 0.06,
+                       b: 0.06,
+                   },
+                   &vec1 * &col1);
     }
 }
