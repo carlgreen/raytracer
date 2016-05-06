@@ -52,6 +52,21 @@ fn unit_vector(vector: &Vector) -> Vector {
 
 pub struct Metal {
     pub albedo: Vector,
+    fuzz: f64,
+}
+
+impl Metal {
+    pub fn new(albedo: &Vector, fuzz: f64) -> Metal {
+        let f = if fuzz < 1.0 {
+            fuzz
+        } else {
+            1.0
+        };
+        Metal {
+            albedo: albedo.clone(),
+            fuzz: f,
+        }
+    }
 }
 
 fn reflect(v: &Vector, n: &Vector) -> Vector {
@@ -61,7 +76,7 @@ fn reflect(v: &Vector, n: &Vector) -> Vector {
 impl Material for Metal {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
         let reflected = reflect(&unit_vector(&ray.direction()), n);
-        let scattered = Ray::new(p, &reflected);
+        let scattered = Ray::new(p, &(&reflected + &(self.fuzz * &random_in_unit_sphere())));
         let attenuation = self.albedo.clone();
         let ok = dot(&scattered.direction(), n) > 0.0;
         (ok, attenuation, scattered)
