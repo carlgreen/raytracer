@@ -41,7 +41,7 @@ impl Material for Lambertian {
 }
 
 pub struct Metal {
-    pub albedo: Vector,
+    albedo: Vector,
     fuzz: f64,
 }
 
