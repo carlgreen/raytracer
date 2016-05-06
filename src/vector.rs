@@ -14,6 +14,10 @@ impl Vector {
     pub fn length(&self) -> f64 {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }
+
+    pub fn unit_vector(&self) -> Vector {
+        self / self.length()
+    }
 }
 
 impl<'a> Add<&'a Vector> for &'a Vector {
@@ -61,5 +65,37 @@ impl<'a, 'b> Sub<&'a Vector> for &'b Vector {
             y: self.y - other.y,
             z: self.z - other.z,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Vector;
+
+    #[test]
+    fn test_already_unit_vector() {
+        assert_eq!(Vector {
+                       x: 1.0,
+                       y: 0.0,
+                       z: 0.0,
+                   },
+                   Vector {
+                       x: 1.0,
+                       y: 0.0,
+                       z: 0.0,
+                   }
+                   .unit_vector());
+    }
+
+    #[test]
+    fn test_non_unit_vector() {
+        let got = &Vector {
+                       x: 0.0,
+                       y: 1.0,
+                       z: 1.0,
+                   }
+                   .unit_vector();
+        assert!(got.y > 0.707 && got.y < 0.708);
+        assert!(got.z > 0.707 && got.z < 0.708);
     }
 }

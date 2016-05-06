@@ -45,11 +45,6 @@ impl Material for Lambertian {
     }
 }
 
-// TODO dedupe
-fn unit_vector(vector: &Vector) -> Vector {
-    vector / vector.length()
-}
-
 pub struct Metal {
     pub albedo: Vector,
     fuzz: f64,
@@ -75,7 +70,7 @@ fn reflect(v: &Vector, n: &Vector) -> Vector {
 
 impl Material for Metal {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
-        let reflected = reflect(&unit_vector(&ray.direction()), n);
+        let reflected = reflect(&ray.direction().unit_vector(), n);
         let scattered = Ray::new(p, &(&reflected + &(self.fuzz * &random_in_unit_sphere())));
         let attenuation = self.albedo.clone();
         let ok = dot(&scattered.direction(), n) > 0.0;

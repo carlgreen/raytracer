@@ -24,41 +24,6 @@ use ray::Ray;
 use sphere::Sphere;
 use vector::Vector;
 
-fn unit_vector(vector: &Vector) -> Vector {
-    vector / vector.length()
-}
-
-#[cfg(test)]
-mod tests {
-    use vector::Vector;
-    use super::unit_vector;
-
-    #[test]
-    fn test_already_unit_vector() {
-        assert_eq!(Vector {
-                       x: 1.0,
-                       y: 0.0,
-                       z: 0.0,
-                   },
-                   unit_vector(&Vector {
-                       x: 1.0,
-                       y: 0.0,
-                       z: 0.0,
-                   }));
-    }
-
-    #[test]
-    fn test_non_unit_vector() {
-        let got = unit_vector(&Vector {
-            x: 0.0,
-            y: 1.0,
-            z: 1.0,
-        });
-        assert!(got.y > 0.707 && got.y < 0.708);
-        assert!(got.z > 0.707 && got.z < 0.708);
-    }
-}
-
 fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
     let (hit, _, _, _, yes, attenuation, scattered) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
@@ -73,7 +38,7 @@ fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
             b: 0.0,
         };
     }
-    let unit_direction = unit_vector(&ray.direction());
+    let unit_direction = &ray.direction().unit_vector();
     let t = 0.5 * (unit_direction.y + 1.0);
     let v = &((1.0 - t) *
               &Vector {
