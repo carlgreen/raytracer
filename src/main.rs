@@ -25,7 +25,7 @@ use sphere::Sphere;
 use vector::Vector;
 
 fn unit_vector(vector: &Vector) -> Vector {
-    return vector / vector.length();
+    vector / vector.length()
 }
 
 #[cfg(test)]

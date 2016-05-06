@@ -47,7 +47,7 @@ impl Material for Lambertian {
 
 // TODO dedupe
 fn unit_vector(vector: &Vector) -> Vector {
-    return vector / vector.length();
+    vector / vector.length()
 }
 
 pub struct Metal {
@@ -70,7 +70,7 @@ impl Metal {
 }
 
 fn reflect(v: &Vector, n: &Vector) -> Vector {
-    return v - &(2.0 * dot(v, n) * n);
+    v - &(2.0 * dot(v, n) * n)
 }
 
 impl Material for Metal {
