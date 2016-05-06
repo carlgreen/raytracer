@@ -4,6 +4,7 @@ extern crate rand;
 mod camera;
 mod color;
 mod hitable;
+mod material;
 mod ray;
 mod sphere;
 mod vector;
@@ -17,6 +18,8 @@ use camera::Camera;
 use color::Color;
 use hitable::Hitable;
 use hitable::Hitables;
+use material::Lambertian;
+use material::Metal;
 use ray::Ray;
 use sphere::Sphere;
 use vector::Vector;
@@ -56,35 +59,19 @@ mod tests {
     }
 }
 
-// TODO dedupe
-fn dot(v1: &Vector, v2: &Vector) -> f64 {
-    v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
-}
-
-fn random_in_unit_sphere() -> Vector {
-    loop {
-        let p = &(2.0 *
-                  &Vector {
-            x: rand::random::<f64>(),
-            y: rand::random::<f64>(),
-            z: rand::random::<f64>(),
-        }) -
-                &Vector {
-            x: 1.0,
-            y: 1.0,
-            z: 1.0,
-        };
-        if dot(&p, &p) < 1.0 {
-            return p;
-        }
-    }
-}
-
-fn color(ray: Ray, hitable: &Hitable) -> Color {
-    let (hit, _, p, n) = hitable.hit(&ray, 0.0, f64::MAX);
+fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
+    let (hit, _, _, _, yes, attenuation, scattered) = hitable.hit(&ray, 0.0, f64::MAX);
     if hit {
-        let target = &(&p + &n) + &random_in_unit_sphere();
-        return 0.5 * color(Ray::new(&p, &(&target - &p)), hitable);
+        if depth < 50 {
+            if yes {
+                return &attenuation * &color(scattered, hitable, depth + 1);
+            }
+        }
+        return Color {
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
+        };
     }
     let unit_direction = unit_vector(&ray.direction());
     let t = 0.5 * (unit_direction.y + 1.0);
@@ -146,6 +133,13 @@ fn main() {
             z: -1.0,
         },
         radius: 0.5,
+        material: &Lambertian {
+            albedo: Vector {
+                x: 0.8,
+                y: 0.3,
+                z: 0.3,
+            },
+        },
     };
     let sphere2 = Sphere {
         center: &Vector {
@@ -154,8 +148,45 @@ fn main() {
             z: -1.0,
         },
         radius: 100.0,
+        material: &Lambertian {
+            albedo: Vector {
+                x: 0.8,
+                y: 0.8,
+                z: 0.0,
+            },
+        },
     };
-    let world = Hitables { objects: &[&sphere1, &sphere2] };
+    let sphere3 = Sphere {
+        center: &Vector {
+            x: 1.0,
+            y: 0.0,
+            z: -1.0,
+        },
+        radius: 0.5,
+        material: &Metal {
+            albedo: Vector {
+                x: 0.8,
+                y: 0.6,
+                z: 0.2,
+            },
+        },
+    };
+    let sphere4 = Sphere {
+        center: &Vector {
+            x: -1.0,
+            y: 0.0,
+            z: -1.0,
+        },
+        radius: 0.5,
+        material: &Metal {
+            albedo: Vector {
+                x: 0.8,
+                y: 0.8,
+                z: 0.8,
+            },
+        },
+    };
+    let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4] };
     let cam = Camera {
         lower_left_corner: lower_left_corner,
         horizontal: horizontal,
@@ -174,7 +205,7 @@ fn main() {
                 let u = (i as f64 + rand::random::<f64>()) / nx as f64;
                 let v = (j as f64 + rand::random::<f64>()) / ny as f64;
                 let r = cam.get_ray(u, v);
-                col = col + color(r, &world);
+                col = col + color(r, &world, 0);
             }
             col = col / ns as f64;
 

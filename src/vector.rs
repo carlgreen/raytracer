@@ -52,7 +52,7 @@ impl<'a> Mul<&'a Vector> for f64 {
     }
 }
 
-impl<'a> Sub<&'a Vector> for &'a Vector {
+impl<'a, 'b> Sub<&'a Vector> for &'b Vector {
     type Output = Vector;
 
     fn sub(self, other: &Vector) -> Vector {
