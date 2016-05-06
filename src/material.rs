@@ -16,7 +16,6 @@ fn dot(v1: &Vector, v2: &Vector) -> f64 {
     v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 }
 
-// TODO dedupe
 fn random_in_unit_sphere() -> Vector {
     loop {
         let p = &(2.0 *
