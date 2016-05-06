@@ -2,6 +2,7 @@ extern crate rand;
 
 use ray::Ray;
 use vector::Vector;
+use vector::dot;
 
 pub trait Material {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray);
@@ -9,11 +10,6 @@ pub trait Material {
 
 pub struct Lambertian {
     pub albedo: Vector,
-}
-
-// TODO dedupe
-fn dot(v1: &Vector, v2: &Vector) -> f64 {
-    v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 }
 
 fn random_in_unit_sphere() -> Vector {
