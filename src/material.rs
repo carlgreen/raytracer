@@ -116,7 +116,6 @@ impl Material for Dielectric {
             scattered = Ray::new(p, &refraction);
         } else {
             scattered = Ray::new(p, &reflection);
-            return (false, attenuation, scattered);
         }
         (true, attenuation, scattered)
     }
