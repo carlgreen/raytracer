@@ -23,11 +23,7 @@ impl Ray {
     }
 
     pub fn point_at_parameter(&self, t: f64) -> Vector {
-        Vector {
-            x: self.a.x + t * self.b.x,
-            y: self.a.y + t * self.b.y,
-            z: self.a.z + t * self.b.z,
-        }
+        &self.a + &(t * &self.b)
     }
 }
 
