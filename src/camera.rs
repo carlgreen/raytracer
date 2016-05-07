@@ -26,11 +26,7 @@ impl Default for Camera {
                 y: -2.0,
                 z: 0.0,
             },
-            origin: Vector {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            },
+            origin: Vector::new_zero_vector(),
         }
     }
 }

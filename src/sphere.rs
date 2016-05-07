@@ -39,32 +39,11 @@ impl<'a> Hitable for Sphere<'a> {
         }
         (false,
          0.0,
-         Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        },
-         Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        },
+         Vector::new_zero_vector(),
+         Vector::new_zero_vector(),
          false,
-         Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        },
-         Ray::new(&Vector {
-                      x: 0.0,
-                      y: 0.0,
-                      z: 0.0,
-                  },
-                  &Vector {
-                      x: 0.0,
-                      y: 0.0,
-                      z: 0.0,
-                  }))
+         Vector::new_zero_vector(),
+         Ray::new(&Vector::new_zero_vector(), &Vector::new_zero_vector()))
     }
 }
 

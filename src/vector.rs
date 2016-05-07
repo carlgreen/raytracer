@@ -12,6 +12,14 @@ pub struct Vector {
 }
 
 impl Vector {
+    pub fn new_zero_vector() -> Vector {
+        Vector {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
+    }
+
     pub fn length(&self) -> f64 {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }

@@ -86,11 +86,7 @@ fn main() {
         y: -2.0,
         z: 0.0,
     };
-    let origin = Vector {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    };
+    let origin = Vector::new_zero_vector();
 
     let sphere1 = Sphere {
         center: &Vector {

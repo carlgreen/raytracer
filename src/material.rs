@@ -85,12 +85,7 @@ fn refract(v: &Vector, n: &Vector, ni_over_nt: f64) -> (bool, Vector) {
         let refraction = &(ni_over_nt * &(v - &(dt * n))) - &(discriminant.sqrt() * n);
         return (true, refraction);
     }
-    (false,
-     Vector {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    })
+    (false, Vector::new_zero_vector())
 }
 
 fn schlick(cosine: f64, refractiveness: f64) -> f64 {

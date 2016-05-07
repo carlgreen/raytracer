@@ -20,33 +20,12 @@ impl<'a> Hitable for Hitables<'a> {
            t_max: f64)
            -> (bool, f64, Vector, Vector, bool, Vector, Ray) {
         let mut hit = false;
-        let mut p = Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        };
-        let mut n = Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        };
+        let mut p = Vector::new_zero_vector();
+        let mut n = Vector::new_zero_vector();
         let mut closest = t_max;
         let mut scatter_ok = false;
-        let mut attenuation = Vector {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        };
-        let mut scattered = Ray::new(&Vector {
-                                         x: 0.0,
-                                         y: 0.0,
-                                         z: 0.0,
-                                     },
-                                     &Vector {
-                                         x: 0.0,
-                                         y: 0.0,
-                                         z: 0.0,
-                                     });
+        let mut attenuation = Vector::new_zero_vector();
+        let mut scattered = Ray::new(&Vector::new_zero_vector(), &Vector::new_zero_vector());
         for obj in self.objects.iter() {
             let (thishit, t, thisp, thisn, thisscatok, thisat, thissc) = obj.hit(ray,
                                                                                  t_min,
