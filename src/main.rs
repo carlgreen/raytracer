@@ -145,7 +145,16 @@ fn main() {
         radius: 0.5,
         material: &Dielectric { refractiveness: 1.5 },
     };
-    let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4] };
+    let sphere5 = Sphere {
+        center: &Vector {
+            x: -1.0,
+            y: 0.0,
+            z: -1.0,
+        },
+        radius: -0.45,
+        material: &Dielectric { refractiveness: 1.5 },
+    };
+    let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4, &sphere5] };
     let cam = Camera {
         lower_left_corner: lower_left_corner,
         horizontal: horizontal,

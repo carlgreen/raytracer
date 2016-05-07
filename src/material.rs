@@ -93,6 +93,11 @@ fn refract(v: &Vector, n: &Vector, ni_over_nt: f64) -> (bool, Vector) {
     })
 }
 
+fn schlick(cosine: f64, refractiveness: f64) -> f64 {
+    let r0 = ((1.0 - refractiveness) / (1.0 + refractiveness)).powi(2);
+    r0 + ((1.0 - r0) * (1.0 - cosine).powi(5))
+}
+
 impl Material for Dielectric {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
         let reflection = reflect(&ray.direction(), n);
@@ -101,13 +106,22 @@ impl Material for Dielectric {
             y: 1.0,
             z: 1.0,
         };
-        let (outward_normal, ni_over_nt) = if dot(&ray.direction(), n) > 0.0 {
-            (-n, self.refractiveness)
+        let (outward_normal, ni_over_nt, cosine) = if dot(&ray.direction(), n) > 0.0 {
+            (-n,
+             self.refractiveness,
+             self.refractiveness * dot(&ray.direction(), n) / ray.direction().length())
         } else {
-            (n.clone(), 1.0 / self.refractiveness)
+            (n.clone(),
+             1.0 / self.refractiveness,
+             -dot(&ray.direction(), n) / ray.direction().length())
         };
         let (refracted, refraction) = refract(&ray.direction(), &outward_normal, ni_over_nt);
-        let scattered = if refracted {
+        let reflect_prob = if refracted {
+            schlick(cosine, self.refractiveness)
+        } else {
+            1.0
+        };
+        let scattered = if rand::random::<f64>() >= reflect_prob {
             Ray::new(p, &refraction)
         } else {
             Ray::new(p, &reflection)
