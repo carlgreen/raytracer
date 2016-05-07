@@ -1,6 +1,7 @@
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
+use std::ops::Neg;
 use std::ops::Sub;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -56,6 +57,18 @@ impl<'a> Mul<&'a Vector> for f64 {
             x: self * vector.x,
             y: self * vector.y,
             z: self * vector.z,
+        }
+    }
+}
+
+impl<'a> Neg for &'a Vector {
+    type Output = Vector;
+
+    fn neg(self) -> Vector {
+        Vector {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
         }
     }
 }
