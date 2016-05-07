@@ -101,22 +101,17 @@ impl Material for Dielectric {
             y: 1.0,
             z: 1.0,
         };
-        let outward_normal: Vector;
-        let ni_over_nt;
-        if dot(&ray.direction(), n) > 0.0 {
-            outward_normal = -n;
-            ni_over_nt = self.refractiveness;
+        let (outward_normal, ni_over_nt) = if dot(&ray.direction(), n) > 0.0 {
+            (-n, self.refractiveness)
         } else {
-            outward_normal = n.clone();
-            ni_over_nt = 1.0 / self.refractiveness;
-        }
-        let scattered;
+            (n.clone(), 1.0 / self.refractiveness)
+        };
         let (refracted, refraction) = refract(&ray.direction(), &outward_normal, ni_over_nt);
-        if refracted {
-            scattered = Ray::new(p, &refraction);
+        let scattered = if refracted {
+            Ray::new(p, &refraction)
         } else {
-            scattered = Ray::new(p, &reflection);
-        }
+            Ray::new(p, &reflection)
+        };
         (true, attenuation, scattered)
     }
 }
