@@ -18,6 +18,7 @@ use camera::Camera;
 use color::Color;
 use hitable::Hitable;
 use hitable::Hitables;
+use material::Dielectric;
 use material::Lambertian;
 use material::Metal;
 use ray::Ray;
@@ -100,9 +101,9 @@ fn main() {
         radius: 0.5,
         material: &Lambertian {
             albedo: Vector {
-                x: 0.8,
-                y: 0.3,
-                z: 0.3,
+                x: 0.1,
+                y: 0.2,
+                z: 0.5,
             },
         },
     };
@@ -133,7 +134,7 @@ fn main() {
                                   y: 0.6,
                                   z: 0.2,
                               },
-                              1.0),
+                              0.0),
     };
     let sphere4 = Sphere {
         center: &Vector {
@@ -142,12 +143,7 @@ fn main() {
             z: -1.0,
         },
         radius: 0.5,
-        material: &Metal::new(&Vector {
-                                  x: 0.8,
-                                  y: 0.8,
-                                  z: 0.8,
-                              },
-                              0.3),
+        material: &Dielectric { refractiveness: 1.5 },
     };
     let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4] };
     let cam = Camera {

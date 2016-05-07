@@ -72,3 +72,52 @@ impl Material for Metal {
         (ok, attenuation, scattered)
     }
 }
+
+pub struct Dielectric {
+    pub refractiveness: f64,
+}
+
+fn refract(v: &Vector, n: &Vector, ni_over_nt: f64) -> (bool, Vector) {
+    let uv = v.unit_vector();
+    let dt = dot(&uv, n);
+    let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
+    if discriminant > 0.0 {
+        let refraction = &(ni_over_nt * &(v - &(dt * n))) - &(discriminant.sqrt() * n);
+        return (true, refraction);
+    }
+    (false,
+     Vector {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    })
+}
+
+impl Material for Dielectric {
+    fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
+        let reflection = reflect(&ray.direction(), n);
+        let attenuation = Vector {
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+        };
+        let outward_normal: Vector;
+        let ni_over_nt;
+        if dot(&ray.direction(), n) > 0.0 {
+            outward_normal = -n;
+            ni_over_nt = self.refractiveness;
+        } else {
+            outward_normal = n.clone();
+            ni_over_nt = 1.0 / self.refractiveness;
+        }
+        let scattered;
+        let (refracted, refraction) = refract(&ray.direction(), &outward_normal, ni_over_nt);
+        if refracted {
+            scattered = Ray::new(p, &refraction);
+        } else {
+            scattered = Ray::new(p, &reflection);
+            return (false, attenuation, scattered);
+        }
+        (true, attenuation, scattered)
+    }
+}
