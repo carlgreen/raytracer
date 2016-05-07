@@ -19,12 +19,7 @@ fn random_in_unit_sphere() -> Vector {
             x: rand::random::<f64>(),
             y: rand::random::<f64>(),
             z: rand::random::<f64>(),
-        }) -
-                &Vector {
-            x: 1.0,
-            y: 1.0,
-            z: 1.0,
-        };
+        }) - &Vector::new_ones_vector();
         if dot(&p, &p) < 1.0 {
             return p;
         }
@@ -96,11 +91,7 @@ fn schlick(cosine: f64, refractiveness: f64) -> f64 {
 impl Material for Dielectric {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
         let reflection = reflect(&ray.direction(), n);
-        let attenuation = Vector {
-            x: 1.0,
-            y: 1.0,
-            z: 1.0,
-        };
+        let attenuation = Vector::new_ones_vector();
         let (outward_normal, ni_over_nt, cosine) = if dot(&ray.direction(), n) > 0.0 {
             (-n,
              self.refractiveness,

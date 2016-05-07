@@ -41,12 +41,7 @@ fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
     }
     let unit_direction = &ray.direction().unit_vector();
     let t = 0.5 * (unit_direction.y + 1.0);
-    let v = &((1.0 - t) *
-              &Vector {
-        x: 1.0,
-        y: 1.0,
-        z: 1.0,
-    }) +
+    let v = &((1.0 - t) * &Vector::new_ones_vector()) +
             &(t *
               &Vector {
         x: 0.5,

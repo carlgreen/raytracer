@@ -20,6 +20,14 @@ impl Vector {
         }
     }
 
+    pub fn new_ones_vector() -> Vector {
+        Vector {
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
+        }
+    }
+
     pub fn length(&self) -> f64 {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }
