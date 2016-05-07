@@ -121,10 +121,10 @@ impl Material for Dielectric {
         } else {
             1.0
         };
-        let scattered = if rand::random::<f64>() >= reflect_prob {
-            Ray::new(p, &refraction)
-        } else {
+        let scattered = if rand::random::<f64>() < reflect_prob {
             Ray::new(p, &reflection)
+        } else {
+            Ray::new(p, &refraction)
         };
         (true, attenuation, scattered)
     }
