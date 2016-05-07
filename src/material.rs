@@ -2,7 +2,6 @@ extern crate rand;
 
 use ray::Ray;
 use vector::Vector;
-use vector::dot;
 
 pub trait Material {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray);
@@ -20,7 +19,7 @@ fn random_in_unit_sphere() -> Vector {
             y: rand::random::<f64>(),
             z: rand::random::<f64>(),
         }) - &Vector::new_ones_vector();
-        if dot(&p, &p) < 1.0 {
+        if Vector::dot(&p, &p) < 1.0 {
             return p;
         }
     }
@@ -55,7 +54,7 @@ impl Metal {
 }
 
 fn reflect(v: &Vector, n: &Vector) -> Vector {
-    v - &(2.0 * dot(v, n) * n)
+    v - &(2.0 * Vector::dot(v, n) * n)
 }
 
 impl Material for Metal {
@@ -63,7 +62,7 @@ impl Material for Metal {
         let reflected = reflect(&ray.direction().unit_vector(), n);
         let scattered = Ray::new(p, &(&reflected + &(self.fuzz * &random_in_unit_sphere())));
         let attenuation = self.albedo.clone();
-        let ok = dot(&scattered.direction(), n) > 0.0;
+        let ok = Vector::dot(&scattered.direction(), n) > 0.0;
         (ok, attenuation, scattered)
     }
 }
@@ -74,7 +73,7 @@ pub struct Dielectric {
 
 fn refract(v: &Vector, n: &Vector, ni_over_nt: f64) -> (bool, Vector) {
     let uv = v.unit_vector();
-    let dt = dot(&uv, n);
+    let dt = Vector::dot(&uv, n);
     let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
     if discriminant > 0.0 {
         let refraction = &(ni_over_nt * &(v - &(dt * n))) - &(discriminant.sqrt() * n);
@@ -92,14 +91,14 @@ impl Material for Dielectric {
     fn scatter<'a>(&self, ray: &Ray, p: &'a Vector, n: &'a Vector) -> (bool, Vector, Ray) {
         let reflection = reflect(&ray.direction(), n);
         let attenuation = Vector::new_ones_vector();
-        let (outward_normal, ni_over_nt, cosine) = if dot(&ray.direction(), n) > 0.0 {
+        let (outward_normal, ni_over_nt, cosine) = if Vector::dot(&ray.direction(), n) > 0.0 {
             (-n,
              self.refractiveness,
-             self.refractiveness * dot(&ray.direction(), n) / ray.direction().length())
+             self.refractiveness * Vector::dot(&ray.direction(), n) / ray.direction().length())
         } else {
             (n.clone(),
              1.0 / self.refractiveness,
-             -dot(&ray.direction(), n) / ray.direction().length())
+             -Vector::dot(&ray.direction(), n) / ray.direction().length())
         };
         let (refracted, refraction) = refract(&ray.direction(), &outward_normal, ni_over_nt);
         let reflect_prob = if refracted {
