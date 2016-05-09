@@ -66,23 +66,6 @@ fn main() {
 
     let mut img = ImageBuffer::new(nx, ny);
 
-    let lower_left_corner = Vector {
-        x: -2.0,
-        y: 1.0,
-        z: -1.0,
-    };
-    let horizontal = Vector {
-        x: 4.0,
-        y: 0.0,
-        z: 0.0,
-    };
-    let vertical = Vector {
-        x: 0.0,
-        y: -2.0,
-        z: 0.0,
-    };
-    let origin = Vector::new_zero_vector();
-
     let sphere1 = Sphere {
         center: &Vector {
             x: 0.0,
@@ -146,12 +129,7 @@ fn main() {
         material: &Dielectric { refractiveness: 1.5 },
     };
     let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4, &sphere5] };
-    let cam = Camera {
-        lower_left_corner: lower_left_corner,
-        horizontal: horizontal,
-        vertical: vertical,
-        origin: origin,
-    };
+    let cam = Camera::new(90.0, nx as f64 / ny as f64);
 
     for j in 0..ny {
         for i in 0..nx {
