@@ -6,13 +6,13 @@ use ray::Ray;
 use vector::Vector;
 
 pub struct Camera {
-    pub lower_left_corner: Vector,
-    pub horizontal: Vector,
-    pub vertical: Vector,
-    pub origin: Vector,
-    pub u: Vector,
-    pub v: Vector,
-    pub lens_radius: f64,
+    lower_left_corner: Vector,
+    horizontal: Vector,
+    vertical: Vector,
+    origin: Vector,
+    u: Vector,
+    v: Vector,
+    lens_radius: f64,
 }
 
 impl Camera {
