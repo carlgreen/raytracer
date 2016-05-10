@@ -17,7 +17,6 @@ use image::{GenericImage, ImageBuffer};
 use camera::Camera;
 use color::Color;
 use hitable::Hitable;
-use hitable::Hitables;
 use material::Dielectric;
 use material::Lambertian;
 use material::Metal;
@@ -128,7 +127,7 @@ fn main() {
         radius: -0.45,
         material: &Dielectric { refractiveness: 1.5 },
     };
-    let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4, &sphere5] };
+    let world: Vec<&Hitable> = vec![&sphere1, &sphere2, &sphere3, &sphere4, &sphere5];
     let look_from = Vector {
         x: 3.0,
         y: 3.0,

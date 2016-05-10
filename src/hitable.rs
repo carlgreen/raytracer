@@ -9,11 +9,7 @@ pub trait Hitable {
            -> (bool, f64, Vector, Vector, bool, Vector, Ray);
 }
 
-pub struct Hitables<'a> {
-    pub objects: &'a [&'a Hitable],
-}
-
-impl<'a> Hitable for Hitables<'a> {
+impl<'a> Hitable for Vec<&'a Hitable> {
     fn hit(&self,
            ray: &Ray,
            t_min: f64,
@@ -26,7 +22,7 @@ impl<'a> Hitable for Hitables<'a> {
         let mut scatter_ok = false;
         let mut attenuation = Vector::new_zero_vector();
         let mut scattered = Ray::new(&Vector::new_zero_vector(), &Vector::new_zero_vector());
-        for obj in self.objects.iter() {
+        for obj in self.iter() {
             let (thishit, t, thisp, thisn, thisscatok, thisat, thissc) = obj.hit(ray,
                                                                                  t_min,
                                                                                  closest);
