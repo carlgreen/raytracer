@@ -129,7 +129,22 @@ fn main() {
         material: &Dielectric { refractiveness: 1.5 },
     };
     let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4, &sphere5] };
-    let cam = Camera::new(90.0, nx as f64 / ny as f64);
+    let look_from = Vector {
+        x: -2.0,
+        y: 2.0,
+        z: 1.0,
+    };
+    let look_at = Vector {
+        x: 0.0,
+        y: 0.0,
+        z: -1.0,
+    };
+    let view_up = Vector {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
+    let cam = Camera::new(&look_from, &look_at, &view_up, 90.0, nx as f64 / ny as f64);
 
     for j in 0..ny {
         for i in 0..nx {

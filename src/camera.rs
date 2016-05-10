@@ -11,27 +11,18 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn new(vfov: f64, aspect: f64) -> Camera {
+    pub fn new(from: &Vector, at: &Vector, up: &Vector, vfov: f64, aspect: f64) -> Camera {
         let theta = vfov * f64::consts::PI / 180.0;
         let half_height = (theta / 2.0).tan();
         let half_width = aspect * half_height;
+        let w = (from - at).unit_vector();
+        let u = Vector::cross(up, &w).unit_vector();
+        let v = Vector::cross(&w, &u);
         Camera {
-            lower_left_corner: Vector {
-                x: -half_width,
-                y: half_height,
-                z: -1.0,
-            },
-            horizontal: Vector {
-                x: 2.0 * half_width,
-                y: 0.0,
-                z: 0.0,
-            },
-            vertical: Vector {
-                x: 0.0,
-                y: 2.0 * -half_height,
-                z: 0.0,
-            },
-            origin: Vector::new_zero_vector(),
+            lower_left_corner: &(&(from - &(half_width * &u)) + &(half_height * &v)) - &w,
+            horizontal: 2.0 * half_width * &u,
+            vertical: -2.0 * half_height * &v,
+            origin: from.clone(),
         }
     }
 
