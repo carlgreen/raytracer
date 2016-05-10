@@ -130,9 +130,9 @@ fn main() {
     };
     let world = Hitables { objects: &[&sphere1, &sphere2, &sphere3, &sphere4, &sphere5] };
     let look_from = Vector {
-        x: -2.0,
-        y: 2.0,
-        z: 1.0,
+        x: 3.0,
+        y: 3.0,
+        z: 2.0,
     };
     let look_at = Vector {
         x: 0.0,
@@ -144,7 +144,15 @@ fn main() {
         y: 1.0,
         z: 0.0,
     };
-    let cam = Camera::new(&look_from, &look_at, &view_up, 90.0, nx as f64 / ny as f64);
+    let dist_to_focus = (&look_from - &look_at).length();
+    let aperture = 2.0;
+    let cam = Camera::new(&look_from,
+                          &look_at,
+                          &view_up,
+                          20.0,
+                          nx as f64 / ny as f64,
+                          aperture,
+                          dist_to_focus);
 
     for j in 0..ny {
         for i in 0..nx {
