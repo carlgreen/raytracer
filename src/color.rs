@@ -98,12 +98,14 @@ mod tests {
             g: 0.5,
             b: 0.6,
         };
-        assert_eq!(Color {
-                       r: 0.5,
-                       g: 0.7,
-                       b: 0.9,
-                   },
-                   col1 + col2);
+        assert_eq!(
+            Color {
+                r: 0.5,
+                g: 0.7,
+                b: 0.9,
+            },
+            col1 + col2
+        );
     }
 
     #[test]
@@ -113,12 +115,14 @@ mod tests {
             g: 0.2,
             b: 0.3,
         };
-        assert_eq!(Color {
-                       r: 0.033333,
-                       g: 0.066666,
-                       b: 0.1,
-                   },
-                   col1 / 3.0);
+        assert_eq!(
+            Color {
+                r: 0.033333,
+                g: 0.066666,
+                b: 0.1,
+            },
+            col1 / 3.0
+        );
     }
 
     #[test]
@@ -128,12 +132,14 @@ mod tests {
             g: 0.2,
             b: 0.3,
         };
-        assert_eq!(Color {
-                       r: 0.2,
-                       g: 0.4,
-                       b: 0.6,
-                   },
-                   2.0 * col1);
+        assert_eq!(
+            Color {
+                r: 0.2,
+                g: 0.4,
+                b: 0.6,
+            },
+            2.0 * col1
+        );
     }
 
     #[test]
@@ -148,11 +154,13 @@ mod tests {
             g: 0.2,
             b: 0.3,
         };
-        assert_eq!(Color {
-                       r: 0.04,
-                       g: 0.06,
-                       b: 0.06,
-                   },
-                   &vec1 * &col1);
+        assert_eq!(
+            Color {
+                r: 0.04,
+                g: 0.06,
+                b: 0.06,
+            },
+            &vec1 * &col1
+        );
     }
 }

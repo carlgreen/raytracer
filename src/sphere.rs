@@ -10,11 +10,12 @@ pub struct Sphere<'a> {
 }
 
 impl<'a> Hitable for Sphere<'a> {
-    fn hit(&self,
-           ray: &Ray,
-           t_min: f64,
-           t_max: f64)
-           -> (bool, f64, Vector, Vector, bool, Vector, Ray) {
+    fn hit(
+        &self,
+        ray: &Ray,
+        t_min: f64,
+        t_max: f64,
+    ) -> (bool, f64, Vector, Vector, bool, Vector, Ray) {
         let oc = &ray.origin() - self.center;
         let a = Vector::dot(&ray.direction(), &ray.direction());
         let b = Vector::dot(&oc, &ray.direction());
@@ -36,13 +37,15 @@ impl<'a> Hitable for Sphere<'a> {
                 return (true, temp, p, normal, scatter_ok, attenuation, scattered);
             }
         }
-        (false,
-         0.0,
-         Vector::new_zero_vector(),
-         Vector::new_zero_vector(),
-         false,
-         Vector::new_zero_vector(),
-         Ray::new(&Vector::new_zero_vector(), &Vector::new_zero_vector()))
+        (
+            false,
+            0.0,
+            Vector::new_zero_vector(),
+            Vector::new_zero_vector(),
+            false,
+            Vector::new_zero_vector(),
+            Ray::new(&Vector::new_zero_vector(), &Vector::new_zero_vector()),
+        )
     }
 }
 

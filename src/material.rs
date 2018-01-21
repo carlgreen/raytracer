@@ -13,8 +13,7 @@ pub struct Lambertian {
 
 fn random_in_unit_sphere() -> Vector {
     loop {
-        let p = &(2.0 *
-                  &Vector {
+        let p = &(2.0 * &Vector {
             x: rand::random::<f64>(),
             y: rand::random::<f64>(),
             z: rand::random::<f64>(),
@@ -41,11 +40,7 @@ pub struct Metal {
 
 impl Metal {
     pub fn new(albedo: &Vector, fuzz: f64) -> Metal {
-        let f = if fuzz < 1.0 {
-            fuzz
-        } else {
-            1.0
-        };
+        let f = if fuzz < 1.0 { fuzz } else { 1.0 };
         Metal {
             albedo: albedo.clone(),
             fuzz: f,
@@ -92,13 +87,17 @@ impl Material for Dielectric {
         let reflection = reflect(&ray.direction(), n);
         let attenuation = Vector::new_ones_vector();
         let (outward_normal, ni_over_nt, cosine) = if Vector::dot(&ray.direction(), n) > 0.0 {
-            (-n,
-             self.refractiveness,
-             self.refractiveness * Vector::dot(&ray.direction(), n) / ray.direction().length())
+            (
+                -n,
+                self.refractiveness,
+                self.refractiveness * Vector::dot(&ray.direction(), n) / ray.direction().length(),
+            )
         } else {
-            (n.clone(),
-             1.0 / self.refractiveness,
-             -Vector::dot(&ray.direction(), n) / ray.direction().length())
+            (
+                n.clone(),
+                1.0 / self.refractiveness,
+                -Vector::dot(&ray.direction(), n) / ray.direction().length(),
+            )
         };
         let (refracted, refraction) = refract(&ray.direction(), &outward_normal, ni_over_nt);
         let reflect_prob = if refracted {

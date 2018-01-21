@@ -40,9 +40,7 @@ fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
     }
     let unit_direction = &ray.direction().unit_vector();
     let t = 0.5 * (unit_direction.y + 1.0);
-    let v = &((1.0 - t) * &Vector::new_ones_vector()) +
-            &(t *
-              &Vector {
+    let v = &((1.0 - t) * &Vector::new_ones_vector()) + &(t * &Vector {
         x: 0.5,
         y: 0.7,
         z: 1.0,
@@ -102,12 +100,14 @@ fn main() {
             z: -1.0,
         },
         radius: 0.5,
-        material: &Metal::new(&Vector {
-                                  x: 0.8,
-                                  y: 0.6,
-                                  z: 0.2,
-                              },
-                              0.0),
+        material: &Metal::new(
+            &Vector {
+                x: 0.8,
+                y: 0.6,
+                z: 0.2,
+            },
+            0.0,
+        ),
     };
     let sphere4 = Sphere {
         center: &Vector {
@@ -116,7 +116,9 @@ fn main() {
             z: -1.0,
         },
         radius: 0.5,
-        material: &Dielectric { refractiveness: 1.5 },
+        material: &Dielectric {
+            refractiveness: 1.5,
+        },
     };
     let sphere5 = Sphere {
         center: &Vector {
@@ -125,7 +127,9 @@ fn main() {
             z: -1.0,
         },
         radius: -0.45,
-        material: &Dielectric { refractiveness: 1.5 },
+        material: &Dielectric {
+            refractiveness: 1.5,
+        },
     };
     let world: Vec<&Hitable> = vec![&sphere1, &sphere2, &sphere3, &sphere4, &sphere5];
     let look_from = Vector {
@@ -145,13 +149,15 @@ fn main() {
     };
     let dist_to_focus = (&look_from - &look_at).length();
     let aperture = 2.0;
-    let cam = Camera::new(&look_from,
-                          &look_at,
-                          &view_up,
-                          20.0,
-                          nx as f64 / ny as f64,
-                          aperture,
-                          dist_to_focus);
+    let cam = Camera::new(
+        &look_from,
+        &look_at,
+        &view_up,
+        20.0,
+        nx as f64 / ny as f64,
+        aperture,
+        dist_to_focus,
+    );
 
     for j in 0..ny {
         for i in 0..nx {

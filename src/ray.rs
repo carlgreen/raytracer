@@ -34,17 +34,21 @@ mod tests {
 
     #[test]
     fn test_point_at_parameter() {
-        let ray = Ray::new(&Vector {
-                               x: 0.1,
-                               y: 0.1,
-                               z: 0.1,
-                           },
-                           &Vector::new_ones_vector());
-        assert_eq!(ray.point_at_parameter(0.5),
-                   Vector {
-                       x: 0.6,
-                       y: 0.6,
-                       z: 0.6,
-                   });
+        let ray = Ray::new(
+            &Vector {
+                x: 0.1,
+                y: 0.1,
+                z: 0.1,
+            },
+            &Vector::new_ones_vector(),
+        );
+        assert_eq!(
+            ray.point_at_parameter(0.5),
+            Vector {
+                x: 0.6,
+                y: 0.6,
+                z: 0.6,
+            }
+        );
     }
 }
