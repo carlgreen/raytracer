@@ -64,74 +64,80 @@ fn main() {
     let mut img = ImageBuffer::new(nx, ny);
 
     let sphere1 = Sphere {
-        center: &Vector {
+        center: Box::new(Vector {
             x: 0.0,
             y: 0.0,
             z: -1.0,
-        },
+        }),
         radius: 0.5,
-        material: &Lambertian {
+        material: Box::new(Lambertian {
             albedo: Vector {
                 x: 0.1,
                 y: 0.2,
                 z: 0.5,
             },
-        },
+        }),
     };
     let sphere2 = Sphere {
-        center: &Vector {
+        center: Box::new(Vector {
             x: 0.0,
             y: -100.5,
             z: -1.0,
-        },
+        }),
         radius: 100.0,
-        material: &Lambertian {
+        material: Box::new(Lambertian {
             albedo: Vector {
                 x: 0.8,
                 y: 0.8,
                 z: 0.0,
             },
-        },
+        }),
     };
     let sphere3 = Sphere {
-        center: &Vector {
+        center: Box::new(Vector {
             x: 1.0,
             y: 0.0,
             z: -1.0,
-        },
+        }),
         radius: 0.5,
-        material: &Metal::new(
+        material: Box::new(Metal::new(
             &Vector {
                 x: 0.8,
                 y: 0.6,
                 z: 0.2,
             },
             0.0,
-        ),
+        )),
     };
     let sphere4 = Sphere {
-        center: &Vector {
+        center: Box::new(Vector {
             x: -1.0,
             y: 0.0,
             z: -1.0,
-        },
+        }),
         radius: 0.5,
-        material: &Dielectric {
+        material: Box::new(Dielectric {
             refractiveness: 1.5,
-        },
+        }),
     };
     let sphere5 = Sphere {
-        center: &Vector {
+        center: Box::new(Vector {
             x: -1.0,
             y: 0.0,
             z: -1.0,
-        },
+        }),
         radius: -0.45,
-        material: &Dielectric {
+        material: Box::new(Dielectric {
             refractiveness: 1.5,
-        },
+        }),
     };
-    let world: Vec<&Hitable> = vec![&sphere1, &sphere2, &sphere3, &sphere4, &sphere5];
+    let world: Vec<Box<Hitable>> = vec![
+        Box::new(sphere1),
+        Box::new(sphere2),
+        Box::new(sphere3),
+        Box::new(sphere4),
+        Box::new(sphere5),
+    ];
     let look_from = Vector {
         x: 3.0,
         y: 3.0,

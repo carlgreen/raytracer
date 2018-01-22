@@ -10,7 +10,7 @@ pub trait Hitable {
     ) -> (bool, f64, Vector, Vector, bool, Vector, Ray);
 }
 
-impl<'a> Hitable for Vec<&'a Hitable> {
+impl<'a> Hitable for Vec<Box<Hitable>> {
     fn hit(
         &self,
         ray: &Ray,

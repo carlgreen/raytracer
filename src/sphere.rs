@@ -3,20 +3,20 @@ use material::Material;
 use ray::Ray;
 use vector::Vector;
 
-pub struct Sphere<'a> {
-    pub center: &'a Vector,
+pub struct Sphere {
+    pub center: Box<Vector>,
     pub radius: f64,
-    pub material: &'a Material,
+    pub material: Box<Material>,
 }
 
-impl<'a> Hitable for Sphere<'a> {
+impl Hitable for Sphere {
     fn hit(
         &self,
         ray: &Ray,
         t_min: f64,
         t_max: f64,
     ) -> (bool, f64, Vector, Vector, bool, Vector, Ray) {
-        let oc = &ray.origin() - self.center;
+        let oc = &ray.origin() - &*self.center;
         let a = Vector::dot(&ray.direction(), &ray.direction());
         let b = Vector::dot(&oc, &ray.direction());
         let c = Vector::dot(&oc, &oc) - self.radius * self.radius;
@@ -25,15 +25,17 @@ impl<'a> Hitable for Sphere<'a> {
             let temp = (-b - discriminant.sqrt()) / a;
             if temp < t_max && temp > t_min {
                 let p = ray.point_at_parameter(temp);
-                let normal = &(&p - self.center) / self.radius;
-                let (scatter_ok, attenuation, scattered) = scatter(self.material, ray, &p, &normal);
+                let normal = &(&p - &*self.center) / self.radius;
+                let (scatter_ok, attenuation, scattered) =
+                    scatter(&*self.material, ray, &p, &normal);
                 return (true, temp, p, normal, scatter_ok, attenuation, scattered);
             }
             let temp = (-b + discriminant.sqrt()) / a;
             if temp < t_max && temp > t_min {
                 let p = ray.point_at_parameter(temp);
-                let normal = &(&p - self.center) / self.radius;
-                let (scatter_ok, attenuation, scattered) = scatter(self.material, ray, &p, &normal);
+                let normal = &(&p - &*self.center) / self.radius;
+                let (scatter_ok, attenuation, scattered) =
+                    scatter(&*self.material, ray, &p, &normal);
                 return (true, temp, p, normal, scatter_ok, attenuation, scattered);
             }
         }
