@@ -12,7 +12,7 @@ mod vector;
 use std::f64;
 use std::fs::File;
 use std::path::Path;
-use image::{GenericImage, ImageBuffer};
+use image::ImageBuffer;
 
 use camera::Camera;
 use color::Color;
