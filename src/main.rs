@@ -52,17 +52,8 @@ fn color(ray: Ray, hitable: &Hitable, depth: u16) -> Color {
     }
 }
 
-fn main() {
-    let nx = 200;
-    let ny = 100;
-    let ns = 100;
-
-    // consider:
-    // let buffer: &[u8] = ...;
-    // image::save_buffer(&Path::new("image.png"), buffer, 800, 600, image::RGB(8))
-
-    let mut img = ImageBuffer::new(nx, ny);
-
+fn make_scene() -> Vec<Box<Hitable>> {
+    let mut world: Vec<Box<Hitable>> = Vec::new();
     let sphere1 = Sphere {
         center: Box::new(Vector {
             x: 0.0,
@@ -78,6 +69,7 @@ fn main() {
             },
         }),
     };
+    world.push(Box::new(sphere1));
     let sphere2 = Sphere {
         center: Box::new(Vector {
             x: 0.0,
@@ -93,6 +85,7 @@ fn main() {
             },
         }),
     };
+    world.push(Box::new(sphere2));
     let sphere3 = Sphere {
         center: Box::new(Vector {
             x: 1.0,
@@ -109,6 +102,7 @@ fn main() {
             0.0,
         )),
     };
+    world.push(Box::new(sphere3));
     let sphere4 = Sphere {
         center: Box::new(Vector {
             x: -1.0,
@@ -120,6 +114,7 @@ fn main() {
             refractiveness: 1.5,
         }),
     };
+    world.push(Box::new(sphere4));
     let sphere5 = Sphere {
         center: Box::new(Vector {
             x: -1.0,
@@ -131,13 +126,23 @@ fn main() {
             refractiveness: 1.5,
         }),
     };
-    let world: Vec<Box<Hitable>> = vec![
-        Box::new(sphere1),
-        Box::new(sphere2),
-        Box::new(sphere3),
-        Box::new(sphere4),
-        Box::new(sphere5),
-    ];
+    world.push(Box::new(sphere5));
+
+    world
+}
+
+fn main() {
+    let nx = 200;
+    let ny = 100;
+    let ns = 100;
+
+    // consider:
+    // let buffer: &[u8] = ...;
+    // image::save_buffer(&Path::new("image.png"), buffer, 800, 600, image::RGB(8))
+
+    let mut img = ImageBuffer::new(nx, ny);
+
+    let world = make_scene();
     let look_from = Vector {
         x: 3.0,
         y: 3.0,
