@@ -8,6 +8,9 @@ addons:
       - libelf-dev
       - libdw-dev
       - binutils-dev # optional: only required for the --verify flag of coveralls
+      - cmake # also required for cargo-update
+    sources:
+      - kalakris-cmake
 before_script:
   - export PATH=$HOME/.cargo/bin:$PATH
   - cargo install cargo-update || echo "cargo-update already installed"
