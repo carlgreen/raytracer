@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 language: rust
 cache: cargo
 addons:
@@ -8,7 +8,6 @@ addons:
       - libelf-dev
       - libdw-dev
       - binutils-dev # optional: only required for the --verify flag of coveralls
-      - libbfd-dev
       - cmake # also required for cargo-update
     sources:
       - kalakris-cmake
